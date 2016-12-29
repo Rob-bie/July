@@ -10,6 +10,12 @@ defmodule July.Eval do
     end
   end
 
+  defp _eval({:=, ident, node}, env) do
+    result  = _eval(node, env)
+    new_env = Map.put(env, ident, result)
+    {result, new_env}
+  end
+  
   defp _eval({op, node_l, node_r}, env) do
     env[op].(_eval(node_l, env), _eval(node_r, env))
   end

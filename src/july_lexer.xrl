@@ -1,7 +1,8 @@
 Definitions.
 
 NUMBER          = \-?[0-9]+(\.[0-9]+)?
-OPERATOR_INFIX  = (\+|\-|\*|\/|<|>|<=|>=|==|and|or|not)
+L_IDENT         = [a-z_]+
+OPERATOR_INFIX  = (\+|\-|\*|\/|=|<|>|<=|>=|==|and|or|not)
 PARENS          = (\(|\))
 WHITESPACE      = [\s\t\r\n]+
 
@@ -10,6 +11,7 @@ Rules.
 {NUMBER}         : {token, {number, TokenLine, to_number(TokenChars)}}.
 {OPERATOR_INFIX} : {token, {list_to_atom(TokenChars), TokenLine}}.
 {PARENS}         : {token, {list_to_atom(TokenChars), TokenLine}}.
+{L_IDENT}        : {token, {l_ident, TokenLine, TokenChars}}.
 {WHITESPACE}     : skip_token.
 
 Erlang code.

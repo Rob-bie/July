@@ -5,9 +5,22 @@ defmodule July.Eval do
 
   def eval(bin) do
     case Parser.parse(bin) do
-      {:ok, ast}       -> _eval(ast, Global.global_env)
+      {:ok, ast}       -> _eval_all(ast, Global.global_env)
       {:error, reason} -> reason
     end
+  end
+
+  defp _eval_all(expr, env) when is_tuple(expr) do
+    _eval(expr, env)
+  end
+
+  defp _eval_all(exprs, env) do
+    Enum.reduce(exprs, {nil, env}, fn(expr, {_val, env}) ->
+      case _eval(expr, env) do
+        {result, new_env} -> {result, new_env}
+        result            -> {result, env}
+      end
+    end)
   end
 
   defp _eval({:=, ident, node}, env) do
@@ -26,6 +39,10 @@ defmodule July.Eval do
 
   defp _eval(n, _env) when is_number(n) do
     n
+  end
+
+  defp _eval(ident, env) do
+    Map.get(env, ident)
   end
 
 end

@@ -4,6 +4,7 @@ NUMBER          = \-?[0-9]+(\.[0-9]+)?
 L_IDENT         = [a-z_]+
 OPERATOR_INFIX  = (\+|\-|\*|\/|=|<|>|<=|>=|==|and|or|not)
 PARENS          = (\(|\))
+BRACES          = (\{|\})
 WHITESPACE      = [\s\t\r\n]+
 
 Rules.
@@ -11,6 +12,7 @@ Rules.
 {NUMBER}         : {token, {number, TokenLine, to_number(TokenChars)}}.
 {OPERATOR_INFIX} : {token, {list_to_atom(TokenChars), TokenLine}}.
 {PARENS}         : {token, {list_to_atom(TokenChars), TokenLine}}.
+{BRACES}         : {token, {list_to_atom(TokenChars), TokenLine}}.
 {L_IDENT}        : {token, {l_ident, TokenLine, TokenChars}}.
 {WHITESPACE}     : skip_token.
 

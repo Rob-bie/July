@@ -1,7 +1,7 @@
 Definitions.
 
 NUMBER          = \-?[0-9]+(\.[0-9]+)?
-OPERATOR_INFIX  = (\+|\-|\*|\/|<|>|<=|>=|==)
+OPERATOR_INFIX  = (\+|\-|\*|\/|<|>|<=|>=|==|and|or|not)
 PARENS          = (\(|\))
 WHITESPACE      = [\s\t\r\n]+
 

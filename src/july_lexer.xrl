@@ -5,7 +5,9 @@ L_IDENT         = [a-z_]+
 OPERATOR_INFIX  = (\+|\-|\*|\/|=|<|>|<=|>=|==|and|or|not)
 PARENS          = (\(|\))
 BRACES          = (\{|\})
+COMMA           = ,
 WHITESPACE      = [\s\t\r\n]+
+KEYWORDS        = (fn|if)
 
 Rules.
 
@@ -13,6 +15,8 @@ Rules.
 {OPERATOR_INFIX} : {token, {list_to_atom(TokenChars), TokenLine}}.
 {PARENS}         : {token, {list_to_atom(TokenChars), TokenLine}}.
 {BRACES}         : {token, {list_to_atom(TokenChars), TokenLine}}.
+{COMMA}          : {token, {',', TokenLine}}.
+{KEYWORDS}       : {token, {list_to_atom(TokenChars), TokenLine}}.
 {L_IDENT}        : {token, {l_ident, TokenLine, TokenChars}}.
 {WHITESPACE}     : skip_token.
 

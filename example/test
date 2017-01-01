@@ -1,0 +1,10 @@
+fn test_func(x, y) {
+  z = 5
+  x + y + z
+  l = 5
+  (x + y + z) / l
+}
+
+fn other_func(x) { x * -1 }
+
+not test_func(5, other_func(5)) == 0

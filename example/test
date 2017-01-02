@@ -1,10 +1,14 @@
-fn test_func(x, y) {
-  z = 5
-  x + y + z
-  l = 5
-  (x + y + z) / l
+fn fact(n) {
+  x = 3
+  inspect(x)
+  if {
+    x == 3 -> {
+      x = 5
+      x + 2
+      inspect(x)
+    }
+  }
+  inspect(x)
 }
 
-fn other_func(x) { x * -1 }
-
-not test_func(5, other_func(5)) == 0
+fact(150)

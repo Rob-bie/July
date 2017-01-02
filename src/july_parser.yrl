@@ -18,6 +18,7 @@ Terminals '+'
           'fn'
           'if'
           ','
+          '->'
           number
           l_ident.
 
@@ -30,7 +31,10 @@ Nonterminals expr
              arg_list
              func_dec
              func_decs
-             func_inv.
+             func_inv
+             clause
+             clauses
+             if_stmt.
 
 Rootsymbol func_decs.
 
@@ -40,6 +44,14 @@ Unary 70   'not'.
 Left  80   '<' '>' '<=' '>=' '=='.
 Left  100  '+' '-'.
 Left  110  '*' '/'.
+
+if_stmt -> 'if' '{' clauses '}' : {if_stmt, '$3'}.
+
+clauses -> clause clauses : ['$1'|'$2'].
+clauses -> clause         : ['$1'].
+
+clause -> expr '->' expr  : {'$1', '$3'}.
+clause -> expr '->' block : {'$1', '$3'}.
 
 func_decs -> func_dec func_decs : ['$1'|'$2'].
 func_decs -> func_dec           : ['$1'].
@@ -59,11 +71,12 @@ comma_sep_exprs -> expr                        : ['$1'].
 comma_sep_ident -> l_ident ',' comma_sep_ident : [unpack('$1')|'$3'].
 comma_sep_ident -> l_ident                     : [unpack('$1')].
 
-block -> '{' exprs '}' : '$2'.
+block -> '{' exprs '}' : {block, '$2'}.
 
 exprs -> expr exprs : ['$1'|'$2'].
 exprs -> expr       : ['$1'].
 
+expr -> if_stmt          : '$1'.
 expr -> func_inv         : '$1'.
 expr -> expr '+' expr    : {unpack('$2'), '$1', '$3'}.
 expr -> expr '-' expr    : {unpack('$2'), '$1', '$3'}.

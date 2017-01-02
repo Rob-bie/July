@@ -30,10 +30,22 @@ defmodule July.Eval do
   end
 
   defp _eval({:fn_inv, ident, args}, env) do
-    %{params: params, body: body} = env[ident]
-    args = Enum.map(args, fn(expr) -> _eval(expr, env) end)
-    new_env = Enum.zip(params, args) |> Enum.into(%{}) |> Map.merge(env)
-    _eval_block(body, new_env)
+    evaluated_args = Enum.map(args, fn(expr) -> _eval(expr, env) end)
+    case env[ident] do
+      %{params: params, body: body} ->
+        bounded_args = Enum.zip(params, args) |> Enum.into(%{})
+        new_env = Map.merge(env, bounded_args)
+        _eval(body, new_env)
+      builtin_func                  ->
+        apply(builtin_func, evaluated_args)
+    end
+  end
+
+  defp _eval({:if_stmt, clauses}, env) do
+    {_body, result} = Enum.find(clauses, fn({clause, _r}) ->
+      _eval(clause, env)
+    end)
+    _eval(result, env)
   end
 
   defp _eval({:=, ident, node}, env) do
@@ -41,12 +53,18 @@ defmodule July.Eval do
     new_env = Map.put(env, ident, result)
     {:bind, result, new_env}
   end
+
+  defp _eval({:block, body}, env) do
+    {result, _env} = _eval_all(body, env)
+    result
+  end
   
   defp _eval({op, node_l, node_r}, env) do
     env[op].(_eval(node_l, env), _eval(node_r, env))
   end
 
   defp _eval({op, node}, env) do
+    IO.inspect op
     env[op].(_eval(node, env))
   end
 
@@ -56,11 +74,6 @@ defmodule July.Eval do
 
   defp _eval(ident, env) do
     Map.get(env, ident)
-  end
-
-  defp _eval_block(exprs, env) do
-    {result, _new_env} = _eval_all(exprs, env)
-    result
   end
 
 end

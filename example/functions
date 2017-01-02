@@ -1,0 +1,4 @@
+fn sum(x, y) { x + y }
+fn ngt(n) { n * -1 }
+
+ngt(sum(3, sum(4, 5))

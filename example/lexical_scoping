@@ -1,0 +1,12 @@
+fn lexical_scoping(n) {
+   inspect(n)
+   if {
+     n == 0 -> {
+       n = 5
+       inspect(n)
+     }
+   }
+   inspect(n)
+}
+
+lexical_scoping(0)
